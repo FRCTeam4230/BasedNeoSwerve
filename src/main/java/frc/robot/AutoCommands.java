@@ -2,6 +2,7 @@
 package frc.robot;
 
 
+import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.path.PathPlannerTrajectory;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -36,7 +37,9 @@ public class AutoCommands {
   }
 
   private Command getCommand(String pathName, boolean isFirstPath) {
-    PathPlannerTrajectory traj = PathPlanner.loadPath(
+    return null;
+    /*
+    PathPlannerTrajectory traj = PathPlannerPath.loadPath(
       pathName,
       Constants.kAuto.MAX_VELOCITY_METERS_PER_SECOND,
       Constants.kAuto.MAX_ACCEL_METERS_PER_SECOND_SQUARED);
@@ -60,5 +63,7 @@ public class AutoCommands {
         swerve),
 
       swerve.drive(() -> 0.0, () -> 0.0, () -> 0.0, true, false));
+
+     */
   }
 }
