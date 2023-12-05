@@ -1,10 +1,5 @@
 package frc.robot.utils;
 
-import com.ctre.phoenix.sensors.AbsoluteSensorRange;
-import com.ctre.phoenix.sensors.CANCoder;
-import com.ctre.phoenix.sensors.CANCoderConfiguration;
-import com.ctre.phoenix.sensors.SensorInitializationStrategy;
-import com.ctre.phoenix.sensors.SensorTimeBase;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
@@ -15,6 +10,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import frc.robot.Constants;
 
 public class SwerveModule {
@@ -29,8 +25,8 @@ public class SwerveModule {
   private final RelativeEncoder angleEncoder;
   private final SparkMaxPIDController anglePID;
   
-  private final CANCoder canCoder;
-  private final double canCoderOffsetDegrees;
+  private final DutyCycleEncoder absoluteEncoder;
+  private final double absoluteEncoderOffsetDegree;
 
   private double lastAngle;
 
@@ -46,8 +42,8 @@ public class SwerveModule {
     angleEncoder = angleMotor.getEncoder();
     anglePID = angleMotor.getPIDController();
 
-    canCoder = new CANCoder(constants.canCoderID);
-    canCoderOffsetDegrees = constants.canCoderOffsetDegrees;
+    absoluteEncoder = new DutyCycleEncoder(constants.absoluteEncoderPWMPort);
+    absoluteEncoderOffsetDegree = constants.absoluteEncoderOffsetDegree;
 
     configureDevices();
     lastAngle = getState().angle.getRadians();
@@ -79,8 +75,8 @@ public class SwerveModule {
     return new SwerveModuleState(velocity, rot);
   }
 
-  public double getCanCoder() {
-    return canCoder.getAbsolutePosition();
+  public double getAbsolutePosition() {
+    return absoluteEncoder.getAbsolutePosition();
   }
 
   public Rotation2d getAngle() {
@@ -128,16 +124,8 @@ public class SwerveModule {
 
     angleEncoder.setPositionConversionFactor(Constants.kSwerve.ANGLE_ROTATIONS_TO_RADIANS);
     angleEncoder.setVelocityConversionFactor(Constants.kSwerve.ANGLE_RPM_TO_RADIANS_PER_SECOND);
-    angleEncoder.setPosition(Units.degreesToRadians(canCoder.getAbsolutePosition() - canCoderOffsetDegrees));
+    angleEncoder.setPosition(Units.degreesToRadians(absoluteEncoder.getAbsolutePosition() - absoluteEncoderOffsetDegree));
 
-    // CanCoder configuration.
-    CANCoderConfiguration canCoderConfiguration = new CANCoderConfiguration();
-    canCoderConfiguration.absoluteSensorRange = AbsoluteSensorRange.Unsigned_0_to_360;
-    canCoderConfiguration.sensorDirection = Constants.kSwerve.CANCODER_INVERSION;
-    canCoderConfiguration.initializationStrategy = SensorInitializationStrategy.BootToAbsolutePosition;
-    canCoderConfiguration.sensorTimeBase = SensorTimeBase.PerSecond;
-    
-    canCoder.configFactoryDefault();
-    canCoder.configAllSettings(canCoderConfiguration);
+    absoluteEncoder.setDutyCycleRange(0,360);
   }
 }

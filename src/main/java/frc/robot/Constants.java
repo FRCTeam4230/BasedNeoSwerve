@@ -88,7 +88,6 @@ public class Constants {
     /** Inversions. */
     public static final boolean DRIVE_MOTOR_INVERSION = true;
     public static final boolean ANGLE_MOTOR_INVERSION = false;
-    public static final boolean CANCODER_INVERSION = false;
 
     /** Idle modes. */
     public static final IdleMode DRIVE_IDLE_MODE = IdleMode.kBrake;

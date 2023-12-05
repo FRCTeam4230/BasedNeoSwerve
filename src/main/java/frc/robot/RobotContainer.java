@@ -1,7 +1,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.subsystems.Swerve;
@@ -13,14 +13,14 @@ import frc.robot.subsystems.Swerve;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  public final Joystick driver;
+  public final XboxController driver;
 
   public final Swerve swerve;
 
   public final AutoCommands auto;
 
   public RobotContainer() {
-    driver = new Joystick(Constants.kControls.DRIVE_JOYSTICK_ID);
+    driver = new XboxController(Constants.kControls.DRIVE_JOYSTICK_ID);
 
     swerve = new Swerve();
 
